@@ -1,0 +1,49 @@
+name: Deploy
+
+on:
+  push:
+  schedule:
+    - cron:  '0 0 * * 0'
+
+jobs:
+  deploy:
+    strategy:
+      matrix:
+        node-version: ['16']
+    runs-on: ubuntu-latest
+    env:
+      USERNAME: "FnanenDB[bot] 🤖"
+      USEREMAIL: "actions@github.com"
+      OUTPUT: data
+      DUMP: fnanendb.json
+
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          persist-credentials: false
+          fetch-depth: 0
+
+      - uses: actions/setup-node@v2
+        with:
+          node-version: ${{ matrix.node-version }}
+
+      - name: NPM install and run
+        run: |
+          npm install
+          node scraper.js > $DUMP
+
+      - name: Archive code coverage results
+        uses: actions/upload-artifact@v2
+        with:
+          name: $DUMP
+          path: $DUMP
+
+      - name: Commit & Push changes
+        uses: actions-js/push@master
+        with:
+          github_token: ${{ secrets.PAT }}
+          author_email: $USEREMAIL
+          author_name: $USERNAME
+          message: "fnanendb: autopublish ${date}"
+          branch: master
+          directory: $OUTPUT

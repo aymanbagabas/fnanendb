@@ -1,0 +1,16 @@
+{
+  "name": "fnanendb",
+  "version": "0.1.0",
+  "description": "Fnanen.net JSON database",
+  "main": "scraper.js",
+  "type": "module",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Ayman Bagabas",
+  "license": "MIT",
+  "dependencies": {
+    "cheerio": "^1.0.0-rc.10",
+    "node-fetch": "^3.0.0"
+  }
+}
