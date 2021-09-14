@@ -31,6 +31,8 @@ jobs:
         run: |
           npm install
           node scraper.js > $DUMP
+          tar -czvf fnanendb.tar.gz $DUMP
+          echo "::set-env name=NOW::v$(date +'%Y%m%d.%H%M%S')"
 
       - name: Archive code coverage results
         uses: actions/upload-artifact@v2
@@ -47,3 +49,9 @@ jobs:
           message: "fnanendb: autopublish ${date}"
           branch: master
           directory: $OUTPUT
+
+      - uses: ncipollo/release-action@v1
+        with:
+          artifacts: $DUMP.tar.gz
+          tag: ${{ env.NOW }}
+          token: ${{ secrets.PAT }}
