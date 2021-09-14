@@ -32,7 +32,7 @@ jobs:
 
       - name: Run, commit, and push
         run: |
-          mkdir $OUTPUT
+          mkdir -p $OUTPUT
           npm install
           node scraper.js
           tar -czvf $DUMP.tar.gz $DUMP
@@ -40,7 +40,7 @@ jobs:
           echo "NOW=$NOW" >> $GITHUB_ENV
           git config --global user.name $USERNAME
           git config --global user.email $USEREMAIL
-          git update-index --refresh
+          git update-index --refresh | true
           git add -f $OUTPUT | true
           git add -f $DUMP | true
           if ! git diff-index --quiet HEAD --; then
