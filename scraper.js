@@ -70,7 +70,7 @@ const debug = process.env.DEBUG;
 									return songs
 								}
 								// songs
-								return Promise.all([...Array(maxPage).keys()].map((i) => {
+								return await Promise.all([...Array(maxPage).keys()].map(async (i) => {
 									function getSongs() {
 										if (i === 0) {
 											return Promise.resolve(parseSongs(html))
@@ -79,8 +79,8 @@ const debug = process.env.DEBUG;
 											return fetch(pageUrl).then(res => res.text()).then(html => parseSongs(html)).catch(console.error);
 										}
 									}
-									return getSongs().then(songs => {
-										return Promise.all((songs || []).map(song => {
+									return getSongs().then(async songs => {
+										return await Promise.all((songs || []).map(song => {
 											const songUrl = url + song.url;
 											if (debug) {
 												console.log(`Scraping ${songUrl}...`)
@@ -156,7 +156,7 @@ const debug = process.env.DEBUG;
 			}))
 		}).then(() => {
 			if (dump) {
-				console.log(JSON.stringify(artistSongs));
+				fs.writeFileSync(dump, JSON.stringify(artistSongs));
 			}
 		})
 })();
