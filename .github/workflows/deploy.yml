@@ -16,6 +16,7 @@ jobs:
       USEREMAIL: "actions@github.com"
       OUTPUT: data
       DUMP: fnanendb.json
+      DEBUG: true
 
     steps:
       - uses: actions/checkout@v2
