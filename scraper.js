@@ -131,7 +131,11 @@ const dump = process.env.DUMP;
 													artistSongs.push(data);
 												}
 												if (output) {
-													const file = path.join(output, artist, `${title}.json`);
+													const file = path.join(output, artist, title);
+													if (fs.existsSync(file)) {
+														file += '_';
+													}
+													file += '.json';
 													fs.writeFileSync(file, JSON.stringify(data));
 												}
 											})
