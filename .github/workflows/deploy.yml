@@ -22,7 +22,6 @@ jobs:
       - uses: technote-space/auto-cancel-redundant-job@v1
       - uses: actions/checkout@v2
         with:
-          persist-credentials: false
           fetch-depth: 0
 
       - uses: actions/setup-node@v2
@@ -32,9 +31,10 @@ jobs:
       - name: NPM install and run
         run: |
           mkdir $OUTPUT
+          touch $OUTPUT/test
           npm install
-          node scraper.js
-          tar -czvf $DUMP.tar.gz $DUMP
+          #node scraper.js
+          #tar -czvf $DUMP.tar.gz $DUMP
           export NOW=v$(date +'%Y%m%d.%H%M%S')
           echo "NOW=$NOW" >> $GITHUB_ENV
           git config --global user.name $USERNAME
@@ -42,7 +42,7 @@ jobs:
           git add -A
           git add $OUTPUT
           git commit -m "fnanendb: autopublish $NOW"
-          git push origin master
+          git push origin HEAD:master
 
       - name: Archive code coverage results
         uses: actions/upload-artifact@v2
