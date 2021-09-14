@@ -71,7 +71,7 @@ const debug = process.env.DEBUG;
 								}
 								// songs
 								return await Promise.all([...Array(maxPage).keys()].map(async (i) => {
-									function getSongs() {
+									async function getSongs() {
 										if (i === 0) {
 											return Promise.resolve(parseSongs(html))
 										} else {
@@ -79,7 +79,7 @@ const debug = process.env.DEBUG;
 											return fetch(pageUrl).then(res => res.text()).then(html => parseSongs(html)).catch(console.error);
 										}
 									}
-									return getSongs().then(async songs => {
+									return await getSongs().then(async songs => {
 										return await Promise.all((songs || []).map(async song => {
 											const songUrl = url + song.url;
 											if (debug) {

@@ -39,6 +39,7 @@ jobs:
           echo "NOW=$NOW" >> $GITHUB_ENV
           git config --global user.name $USERNAME
           git config --global user.email $USEREMAIL
+          git add -A
           git add $OUTPUT
           git commit -m "fnanendb: autopublish $NOW"
           git push origin master
