@@ -46,9 +46,9 @@ jobs:
         uses: actions-js/push@master
         with:
           github_token: ${{ secrets.PAT }}
-          author_email: $USEREMAIL
-          author_name: $USERNAME
-          message: "fnanendb: autopublish ${date}"
+          author_email: ${{ env.USEREMAIL }}
+          author_name: ${{ env.USERNAME }}
+          message: "fnanendb: autopublish ${{ env.NOW }}"
           branch: master
           directory: ${{ env.OUTPUT }}
 
