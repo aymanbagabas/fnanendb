@@ -2,6 +2,8 @@ name: Deploy
 
 on:
   push:
+    branches:
+      - master
   schedule:
     - cron:  '0 0 * * 0'
 
@@ -39,8 +41,9 @@ jobs:
           git config --global user.name $USERNAME
           git config --global user.email $USEREMAIL
           git update-index --refresh
+          git add -f $OUTPUT | true
+          git add -f $DUMP | true
           if ! git diff-index --quiet HEAD --; then
-            git add -f $OUTPUT
             git commit -m "fnanendb: autopublish $NOW"
             git push origin HEAD:master
           fi
