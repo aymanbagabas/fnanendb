@@ -38,7 +38,7 @@ const debug = process.env.DEBUG;
 									fs.mkdirSync(dir, { recursive: true });
 								}
 							}
-							return fetch(artistUrl).then(res => res.text()).then(async html => {
+							return await fetch(artistUrl).then(res => res.text()).then(async html => {
 								const $ = cheerio.load(html);
 								const items = $('#fnanenList .catList #paging ul.pagination li');
 								// pagination
@@ -80,12 +80,12 @@ const debug = process.env.DEBUG;
 										}
 									}
 									return getSongs().then(async songs => {
-										return await Promise.all((songs || []).map(song => {
+										return await Promise.all((songs || []).map(async song => {
 											const songUrl = url + song.url;
 											if (debug) {
 												console.log(`Scraping ${songUrl}...`)
 											}
-											return fetch(songUrl).then(res => res.text()).then(async html => {
+											return await fetch(songUrl).then(res => res.text()).then(async html => {
 												const $ = cheerio.load(html);
 												const titleEl = $('#fnanenList .lyricsPage .itemTitle');
 												const ldiv = $('#fnanenList .lyricsPage .lyrics');
