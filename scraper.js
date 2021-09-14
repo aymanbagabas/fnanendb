@@ -80,7 +80,7 @@ const debug = process.env.DEBUG;
 										}
 									}
 									return getSongs().then(songs => {
-										return Promise.all(songs.map(song => {
+										return Promise.all((songs || []).map(song => {
 											const songUrl = url + song.url;
 											if (debug) {
 												console.log(`Scraping ${songUrl}...`)
@@ -90,7 +90,7 @@ const debug = process.env.DEBUG;
 												const titleEl = $('#fnanenList .lyricsPage .itemTitle');
 												const ldiv = $('#fnanenList .lyricsPage .lyrics');
 												const lddiv = $('#fnanenList .lyricsPage .lyrics .lrxData');
-												const title = titleEl.first().text();
+												const title = titleEl.first().text() || song.name;
 												let lyrics = '';
 												let author;
 												let composer;
