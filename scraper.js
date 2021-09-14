@@ -141,6 +141,13 @@ const debug = process.env.DEBUG;
 						node.children.forEach(n => {
 							if (n.type === 'text') {
 								lyrics += n.data + '\n';
+							} else if (n?.name === 'strong' || n?.name === 'span') {
+								const s = n?.children?.[0];
+								s?.children?.forEach(c => {
+									if (c?.type === 'text') {
+										lyrics += c.data + '\n';
+									}
+								})
 							}
 						})
 					})

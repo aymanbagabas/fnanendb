@@ -28,7 +28,7 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
 
-      - name: NPM install and run
+      - name: Run, commit, and push
         run: |
           mkdir $OUTPUT
           npm install
@@ -38,9 +38,12 @@ jobs:
           echo "NOW=$NOW" >> $GITHUB_ENV
           git config --global user.name $USERNAME
           git config --global user.email $USEREMAIL
-          git add $OUTPUT
-          git commit -m "fnanendb: autopublish $NOW"
-          git push origin HEAD:master
+          git update-index --refresh
+          if ! git diff-index --quiet HEAD --; then
+            git add -f $OUTPUT
+            git commit -m "fnanendb: autopublish $NOW"
+            git push origin HEAD:master
+          fi
 
       - name: Archive code coverage results
         uses: actions/upload-artifact@v2
