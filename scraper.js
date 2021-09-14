@@ -7,6 +7,7 @@ const url = 'https://fnanen.com';
 const artistSongs = {};
 const output = process.env.OUTPUT;
 const dump = process.env.DUMP;
+const debug = process.env.DEBUG;
 
 // main function
 (async function () {
@@ -81,6 +82,9 @@ const dump = process.env.DUMP;
 									return getSongs().then(songs => {
 										return Promise.all(songs.map(song => {
 											const songUrl = url + song.url;
+											if (debug) {
+												console.log(`Scraping ${songUrl}...`)
+											}
 											return fetch(songUrl).then(res => res.text()).then(async html => {
 												const $ = cheerio.load(html);
 												const titleEl = $('#fnanenList .lyricsPage .itemTitle');
@@ -128,15 +132,19 @@ const dump = process.env.DUMP;
 													url: songUrl
 												}
 												if (dump) {
-													artistSongs.push(data);
+													artistSongs[artist].push(data);
 												}
 												if (output) {
-													const file = path.join(output, artist, title);
+													let file = path.join(output, artist, title);
 													if (fs.existsSync(file)) {
 														file += '_';
 													}
 													file += '.json';
 													fs.writeFileSync(file, JSON.stringify(data));
+												}
+											}).then(() => {
+												if (debug) {
+													console.log(`Scraped ${songUrl}`)
 												}
 											})
 										})).catch(console.error);
