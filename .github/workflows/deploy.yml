@@ -30,16 +30,17 @@ jobs:
 
       - name: NPM install and run
         run: |
+          mkdir $OUTPUT
           npm install
           node scraper.js > $DUMP
           tar -czvf fnanendb.tar.gz $DUMP
-          echo "::set-env name=NOW::v$(date +'%Y%m%d.%H%M%S')"
+          echo "NOW=v$(date +'%Y%m%d.%H%M%S')" >> $GITHUB_ENV
 
       - name: Archive code coverage results
         uses: actions/upload-artifact@v2
         with:
-          name: $DUMP
-          path: $DUMP
+          name: ${{ env.DUMP }}
+          path: ${{ env.DUMP }}
 
       - name: Commit & Push changes
         uses: actions-js/push@master
@@ -49,7 +50,7 @@ jobs:
           author_name: $USERNAME
           message: "fnanendb: autopublish ${date}"
           branch: master
-          directory: $OUTPUT
+          directory: ${{ env.OUTPUT }}
 
       - uses: ncipollo/release-action@v1
         with:
