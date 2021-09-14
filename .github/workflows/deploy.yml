@@ -31,15 +31,13 @@ jobs:
       - name: NPM install and run
         run: |
           mkdir $OUTPUT
-          touch $OUTPUT/test
           npm install
-          #node scraper.js
-          #tar -czvf $DUMP.tar.gz $DUMP
+          node scraper.js
+          tar -czvf $DUMP.tar.gz $DUMP
           export NOW=v$(date +'%Y%m%d.%H%M%S')
           echo "NOW=$NOW" >> $GITHUB_ENV
           git config --global user.name $USERNAME
           git config --global user.email $USEREMAIL
-          git add -A
           git add $OUTPUT
           git commit -m "fnanendb: autopublish $NOW"
           git push origin HEAD:master
