@@ -1,4 +1,5 @@
 import * as fs from 'fs';
+import { promises as fsp } from 'fs';
 import * as path from 'path';
 import fetch from 'node-fetch';
 import cheerio from 'cheerio';
@@ -31,27 +32,26 @@ const debug = process.env.DEBUG;
 					.then(async html => {
 						const $ = cheerio.load(html);
 						const items = $('#fnanenList .catList .catRow .cat a');
-						items.each(async (_, a) => {
+						return await Promise.all(items.map(async (_, a) => {
 							const artist = a.children[0].data;
 							const artistUrl = url + a.attribs.href;
+							artists.push({
+								artist,
+								url: artistUrl
+							})
 							if (dump) {
 								artistSongs[artist] = [];
 							}
 							if (output) {
 								const dir = path.join(output, artist);
-								if (!fs.existsSync(dir)) {
-									fs.mkdirSync(dir, { recursive: true });
-								}
+								return !fs.existsSync(dir) ? fsp.mkdir(dir, { recursive: true }) : Promise.resolve();
 							}
-							artists.push({
-								artist,
-								url: artistUrl
-							})
-						});
+							return Promise.resolve();
+						}));
 					})
 			}))
 		})
-	const chunks = 50;
+	const chunks = 100;
 	// artists
 	for (let i = 0; i < artists.length; i += chunks) {
 		const chunk = artists.slice(i, i + chunks);
@@ -115,7 +115,7 @@ const debug = process.env.DEBUG;
 				})
 		}))
 	}
-	const songChunks = 150;
+	const songChunks = 200;
 	for (let i = 0; i < allSongs.length; i += songChunks) {
 		const chunk = allSongs.slice(i, i + songChunks);
 		await Promise.all(chunk.map(async song => {
@@ -189,7 +189,9 @@ const debug = process.env.DEBUG;
 							file += '_';
 						}
 						file += '.json';
-						fs.writeFileSync(file, JSON.stringify(data));
+						return fsp.writeFile(file, JSON.stringify(data))
+					} else {
+						return Promise.resolve();
 					}
 				}).then(() => {
 					if (debug) {
