@@ -225,7 +225,7 @@ const debug = process.env.DEBUG;
 					}
 					if (output) {
 						let file = path.join(output, artist, title);
-						if (artistSongs[artist].find(s => s.title === title)) {
+						if (artistSongs[artist]?.map(s => s.title === title)?.length > 1) {
 							file += '_';
 						}
 						file += '.json';
