@@ -142,7 +142,7 @@ const debug = process.env.DEBUG;
 						node.children?.forEach((n, cidx) => {
 							if (n.type === 'text') {
 								lyrics += n.data + '\n';
-							} else if (n?.name === 'strong' || n?.name === 'span') {
+							} else if (!node.attribs?.class?.includes('lrxData') && (n?.name === 'strong' || n?.name === 'span')) {
 								n?.children?.forEach(c => {
 									if (c?.type === 'text') {
 										lyrics += c.data + '\n';
