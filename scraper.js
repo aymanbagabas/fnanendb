@@ -142,7 +142,7 @@ const debug = process.env.DEBUG;
 						node.children?.forEach((n, cidx) => {
 							if (n.type === 'text') {
 								lyrics += n.data + '\n';
-							} else if (!node.attribs?.class?.includes('lrxData') && (n?.name === 'strong' || n?.name === 'span')) {
+							} else if (!node.attribs?.class?.includes('lrxData') && node.name !== 'h3' && (n?.name === 'strong' || n?.name === 'span')) {
 								n?.children?.forEach(c => {
 									if (c?.type === 'text') {
 										lyrics += c.data + '\n';
@@ -225,9 +225,10 @@ const debug = process.env.DEBUG;
 					}
 					if (output) {
 						let file = path.join(output, artist, title);
-						if (artistSongs[artist]?.map(s => s.title === title)?.length > 1) {
-							file += '_';
-						}
+						// FIXME titles with duplicate names
+						// if (artistSongs[artist]?.map(s => s.title === title)?.length > 1) {
+						// 	file += '_';
+						// }
 						file += '.json';
 						return fsp.writeFile(file, JSON.stringify(data))
 					} else {
