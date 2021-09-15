@@ -3,6 +3,7 @@ import { promises as fsp } from 'fs';
 import * as path from 'path';
 import fetch from 'node-fetch';
 import cheerio from 'cheerio';
+import he from 'he';
 
 const url = 'https://fnanen.com';
 const artistSongs = {};
@@ -137,20 +138,60 @@ const debug = process.env.DEBUG;
 					let author;
 					let composer;
 					let date;
-					ldiv.children('p, div').each((_, node) => {
-						node.children.forEach(n => {
+					ldiv.children('p, div, h3, table').each((nidx, node) => {
+						node.children?.forEach((n, cidx) => {
 							if (n.type === 'text') {
 								lyrics += n.data + '\n';
 							} else if (n?.name === 'strong' || n?.name === 'span') {
 								n?.children?.forEach(c => {
 									if (c?.type === 'text') {
 										lyrics += c.data + '\n';
+									} else if (c?.name === 'strong' || c?.name === 'span') {
+										c?.children?.forEach(s => {
+											if (s?.type === 'text') {
+												lyrics += s.data + '\n';
+											}
+										})
+									}
+								})
+							} else if (n?.name === 'div' && cidx === 0) {
+								n?.children?.forEach(d => {
+									if (d?.name === 'strong') {
+										d?.children?.forEach(c => {
+											if (c?.type === 'text') {
+												lyrics += c.data + '\n';
+											}
+										})
+									}
+								})
+							} else if (node.name === 'h3' && nidx === 0) {
+								n?.children?.forEach(p => {
+									if (p?.type === 'text') {
+										lyrics += p.data + '\n';
+									}
+								})
+							} else if (n?.name === 'table' && nidx === 0) {
+								n?.children?.forEach(t => {
+									if (t?.name === 'tbody') {
+										t?.children?.forEach(tr => {
+											if (tr?.name === 'tr') {
+												tr?.children?.forEach(td => {
+													if (td?.name === 'td') {
+														td?.children?.forEach(txt => {
+															if (txt?.type === 'text') {
+																lyrics += txt.data + '\n';
+															}
+														})
+													}
+												})
+											}
+										})
 									}
 								})
 							}
 						})
 					})
-					lyrics = lyrics.trim();
+					lyrics = he.decode(lyrics).trim();
 					const keys = lddiv.children('span.extLbl')
 					const values = lddiv.children('span.extTxt')
 					function get(text) {
@@ -184,7 +225,7 @@ const debug = process.env.DEBUG;
 					}
 					if (output) {
 						let file = path.join(output, artist, title);
-						if (fs.existsSync(file)) {
+						if (artistSongs[artist].find(s => s.title === title)) {
 							file += '_';
 						}
 						file += '.json';
