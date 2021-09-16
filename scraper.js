@@ -140,15 +140,15 @@ const debug = process.env.DEBUG;
 					let date;
 					ldiv.children('p, div, h3, table').each((nidx, node) => {
 						node.children?.forEach((n, cidx) => {
-							if (n.type === 'text') {
+							if (n.type === 'text' && n.data !== '\n') {
 								lyrics += n.data + '\n';
 							} else if (!node.attribs?.class?.includes('lrxData') && node.name !== 'h3' && (n?.name === 'strong' || n?.name === 'span')) {
 								n?.children?.forEach(c => {
-									if (c?.type === 'text') {
+									if (c?.type === 'text' && c.data !== '\n') {
 										lyrics += c.data + '\n';
 									} else if (c?.name === 'strong' || c?.name === 'span') {
 										c?.children?.forEach(s => {
-											if (s?.type === 'text') {
+											if (s?.type === 'text' && s.data !== '\n') {
 												lyrics += s.data + '\n';
 											}
 										})
@@ -158,7 +158,7 @@ const debug = process.env.DEBUG;
 								n?.children?.forEach(d => {
 									if (d?.name === 'strong') {
 										d?.children?.forEach(c => {
-											if (c?.type === 'text') {
+											if (c?.type === 'text' && c.data !== '\n') {
 												lyrics += c.data + '\n';
 											}
 										})
@@ -166,20 +166,22 @@ const debug = process.env.DEBUG;
 								})
 							} else if (node.name === 'h3' && nidx === 0) {
 								n?.children?.forEach(p => {
-									if (p?.type === 'text') {
+									if (p?.type === 'text' && p.data !== '\n') {
 										lyrics += p.data + '\n';
 									}
 								})
-							} else if (n?.name === 'table' && nidx === 0) {
-								n?.children?.forEach(t => {
-									if (t?.name === 'tbody') {
-										t?.children?.forEach(tr => {
-											if (tr?.name === 'tr') {
-												tr?.children?.forEach(td => {
-													if (td?.name === 'td') {
-														td?.children?.forEach(txt => {
-															if (txt?.type === 'text') {
-																lyrics += txt.data + '\n';
+							} else if (n?.name === 'tbody' && nidx === 0) {
+								n?.children?.forEach(tr => {
+									if (tr?.name === 'tr') {
+										tr?.children?.forEach(td => {
+											if (td?.name === 'td') {
+												td?.children?.forEach(txt => {
+													if (txt?.type === 'text' && txt.data !== '\n') {
+														lyrics += txt.data + '\n';
+													} else if (txt?.name === 'strong' || txt.name === 'span') {
+														txt?.children?.forEach(t => {
+															if (t?.type === 'text' && t.data !== '\n') {
+																lyrics += t.data + '\n';
 															}
 														})
 													}
