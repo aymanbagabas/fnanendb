@@ -27,10 +27,10 @@ async function main () {
             console.log(`Reading ${letter}`)
           }
           if (dump) {
-            artistSongs[artist] = []
+            artistSongs[artist.name] = []
           }
           if (output) {
-            const dir = path.join(output, artist)
+            const dir = path.join(output, artist.name)
             return !fs.existsSync(dir) ? fsp.mkdir(dir, { recursive: true }) : Promise.resolve()
           } else {
             return Promise.resolve()
