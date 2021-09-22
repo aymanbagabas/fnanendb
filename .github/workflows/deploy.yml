@@ -30,11 +30,19 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
 
-      - name: Run, commit, and push
+      - name: Install dependencies
+        run: npm install
+
+      - name: Test
+        run: npm test
+
+      - name: Run
         run: |
           mkdir -p $OUTPUT
-          npm install
-          node scraper.js
+          npm start
+
+      - name: Compress, commit, and push
+        run: |
           tar -czvf $DUMP.tar.gz $DUMP
           export NOW=v$(date +'%Y%m%d.%H%M%S')
           echo "NOW=$NOW" >> $GITHUB_ENV
