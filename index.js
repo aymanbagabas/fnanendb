@@ -3,7 +3,6 @@ import process from 'process'
 import * as fs from 'fs'
 import { promises as fsp } from 'fs'
 import * as path from 'path'
-import cheerio from 'cheerio'
 
 const artistSongs = {}
 const output = process.env.OUTPUT
@@ -24,6 +23,9 @@ async function main () {
             name: artist.name,
             url: artist.url
           })
+          if (debug) {
+            console.log(`Reading ${letter}`)
+          }
           if (dump) {
             artistSongs[artist] = []
           }
@@ -44,14 +46,13 @@ async function main () {
   for (let i = 0; i < artists.length; i += chunks) {
     const chunk = artists.slice(i, i + chunks)
     await Promise.all(chunk.map(async artist => {
-      const artistUrl = artist.url
       const artistName = artist.name
       if (debug) {
         console.log(`Reading artist ${artistName}`)
       }
-      return fetchSongs(artistUrl).then(songs => {
+      return fetchSongs(artist).then(songs => {
         allSongs.push(...songs)
-        if (dump) {
+        if (debug) {
           console.log(`Done scraping artist ${artistName}`)
         }
       })

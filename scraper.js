@@ -13,7 +13,7 @@ export async function fetchLetters () {
       return items.children().map((_, li) => {
         const a = li.children[0]
         const letter = a.attribs.href
-        return (url + letter).toString()
+        return (letter || '').toString()
       }).toArray()
     })
 }
@@ -56,7 +56,7 @@ function parseSongs (html) {
 }
 
 export async function fetchSongs (artist) {
-  const artistUrl = url + artist.url
+  const artistUrl = artist.url
   const artistName = artist.name
   return fetch(artistUrl)
     .then(res => res.text())
