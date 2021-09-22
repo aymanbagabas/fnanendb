@@ -130,8 +130,11 @@ function parseSong (html) {
       if (node?.children?.length > 1 || (node?.children?.length === 1 && ['strong', 'span', 'em', 'text'].includes((node?.children?.[0]?.name || node?.children?.[0]?.type)))) {
         lyrics += '\n'
       }
-    } else if (node.name === 'div' && nidx === 0) {
+    } else if (node.name === 'div' && (nidx === 0 || !['lrxData', 'collapse'].includes(node.attribs?.class))) {
       node.children?.forEach(appendLyrics)
+      if (node.children.length === 1 && nidx !== 0) {
+        lyrics += '\n'
+      }
     } else if (node.name === 'h3' && nidx === 0) {
       node.children?.forEach(appendLyrics)
     } else if (node.name === 'table') {

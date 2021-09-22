@@ -76,5 +76,9 @@ describe('scraper', function () {
     it('parse div > div > strong', function () {
       return assertSong(this, 'albom-9or.json', '/klmat/alaghany/m/m96fa-kaml/albom-9or.html?arabic=البوم%20صور')
     })
+
+    it('parse multiple p & multiple div', function () {
+      return assertSong(this, 'aby-mnk-al3zar.json', '/klmat/alaghany/6/6lal-mda7/aby-mnk-al3zar.html?arabic=ابي%20منك%20العذر')
+    })
   })
 })
