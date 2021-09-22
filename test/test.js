@@ -1,5 +1,5 @@
 import assert from 'assert'
-import { fetchLetters, fetchSong, fetchSongs } from '../scraper.js'
+import { fetchLetters, fetchSong, fetchSongs, url as base } from '../scraper.js'
 import { describe, it } from 'mocha'
 import fs from 'fs/promises'
 import path from 'path'
@@ -28,7 +28,7 @@ describe('scraper', function () {
       this.timeout(10000)
       const artist = {
         name: 'الشيخ امام',
-        url: '/klmat/alaghany/a/alshy5-amam.html?arabic=%D8%A7%D9%84%D8%B4%D9%8A%D8%AE%20%D8%A7%D9%85%D8%A7%D9%85'
+        url: base + '/klmat/alaghany/a/alshy5-amam.html?arabic=%D8%A7%D9%84%D8%B4%D9%8A%D8%AE%20%D8%A7%D9%85%D8%A7%D9%85'
       }
       return fetchSongs(artist).then(songs => {
         assert.equal(songs.length, 123 + 27)
