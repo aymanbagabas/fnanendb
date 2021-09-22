@@ -183,6 +183,6 @@ export async function fetchSong (song) {
     .then(res => res.text())
     .then(async html => ({
       ...parseSong(html),
-      url: he.encode(songUrl)
+      url: encodeURI(songUrl)
     }))
 }
