@@ -19,18 +19,19 @@ async function main () {
       // artists
       return fetchArtists(letter).then(as => {
         as.forEach(artist => {
+          const artistName = (artist.name || '').trim()
           artists.push({
-            name: artist.name,
+            name: artistName,
             url: artist.url
           })
           if (debug) {
             console.log(`Reading ${letter}`)
           }
           if (dump) {
-            artistSongs[artist.name] = []
+            artistSongs[artistName] = []
           }
           if (output) {
-            const dir = path.join(output, artist.name)
+            const dir = path.join(output, artistName)
             return !fs.existsSync(dir) ? fsp.mkdir(dir, { recursive: true }) : Promise.resolve()
           } else {
             return Promise.resolve()

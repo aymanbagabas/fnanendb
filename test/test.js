@@ -25,7 +25,7 @@ describe('scraper', function () {
 
   describe('pagination', function () {
     it('should return 344 songs', function () {
-      this.timeout(10000)
+      this.timeout(20000)
       const artist = {
         name: 'رابح صقر',
         url: base + '/klmat/alaghany/r/rab7-98r.html?arabic=رابح%20صقر'
