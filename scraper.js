@@ -25,7 +25,7 @@ export async function fetchArtists (letter) {
       const $ = cheerio.load(html)
       const items = $('#fnanenList .catList .catRow .cat a')
       return items.map((_, a) => {
-        const artist = a.children[0].data
+        const artist = (a.children[0].data || '').trim()
         const artistUrl = url + a.attribs.href
         return {
           name: artist,
@@ -92,7 +92,7 @@ function parseSong (html) {
   const titleEl = $('#fnanenList .lyricsPage .itemTitle')
   const ldiv = $('#fnanenList .lyricsPage .lyrics')
   const lddiv = $('#fnanenList .lyricsPage .lyrics .lrxData')
-  const title = titleEl.first().text()
+  const title = (titleEl.first().text() || '').trim()
   const data = {}
   let lyrics = ''
   let author
