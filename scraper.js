@@ -78,7 +78,7 @@ export async function fetchSongs (artist) {
           if (i === 0) {
             return Promise.resolve(parseSongs(html))
           } else {
-            const pageUrl = artistUrl + '?page=' + (i + 1)
+            const pageUrl = artistUrl + '&page=' + (i + 1)
             return fetch(pageUrl).then(res => res.text()).then(html => parseSongs(html))
           }
         }

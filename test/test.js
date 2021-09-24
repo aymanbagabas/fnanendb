@@ -24,14 +24,25 @@ describe('scraper', function () {
   })
 
   describe('pagination', function () {
-    it('should return 123 song', function () {
+    it('should return 344 songs', function () {
+      this.timeout(10000)
+      const artist = {
+        name: 'رابح صقر',
+        url: base + '/klmat/alaghany/r/rab7-98r.html?arabic=رابح%20صقر'
+      }
+      return fetchSongs(artist).then(songs => {
+        assert.equal(songs.length, 344)
+      })
+    })
+
+    it('should return 123 songs', function () {
       this.timeout(10000)
       const artist = {
         name: 'الشيخ امام',
         url: base + '/klmat/alaghany/a/alshy5-amam.html?arabic=%D8%A7%D9%84%D8%B4%D9%8A%D8%AE%20%D8%A7%D9%85%D8%A7%D9%85'
       }
       return fetchSongs(artist).then(songs => {
-        assert.equal(songs.length, 123 + 27)
+        assert.equal(songs.length, 123)
       })
     })
   })
