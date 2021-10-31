@@ -17,7 +17,7 @@ jobs:
       USERNAME: "FnanenDB[bot] 🤖"
       USEREMAIL: "actions@github.com"
       OUTPUT: data
-      DUMP: fnanendb.json
+      DUMP: fnanendb
       DEBUG: true
 
     steps:
@@ -43,14 +43,16 @@ jobs:
 
       - name: Compress, commit, and push
         run: |
-          tar -czvf $DUMP.tar.gz $DUMP
+          printf "var DB = %s; window.DB = DB" "$(cat $DUMP.json)" > fnanendb.js
+          tar -czvf $DUMP.tar.gz $DUMP.json
           export NOW=v$(date +'%Y%m%d.%H%M%S')
           echo "NOW=$NOW" >> $GITHUB_ENV
           git config --global user.name $USERNAME
           git config --global user.email $USEREMAIL
           git update-index --refresh | true
           git add -f $OUTPUT | true
-          git add -f $DUMP | true
+          git add -f $DUMP.json | true
+          git add -f $DUMP.js | true
           if ! git diff-index --quiet HEAD --; then
             git commit -m "fnanendb: autopublish $NOW"
             git push origin HEAD:master
