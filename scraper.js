@@ -132,7 +132,7 @@ function parseSong (html) {
       }
     } else if (node.name === 'div' && (nidx === 0 || !['lrxData', 'collapse'].includes(node.attribs?.class))) {
       node.children?.forEach(appendLyrics)
-      if (node.children.length === 1 && nidx !== 0) {
+      if (node.children.length === 1) {
         lyrics += '\n'
       }
     } else if (node.name === 'h3' && nidx === 0) {
