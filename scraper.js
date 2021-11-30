@@ -95,7 +95,7 @@ function parseSong (html) {
   const title = (titleEl.first().text() || '').trim()
   const data = {}
   let lyrics = ''
-  let lyricist
+  let author
   let composer
   let date
   function appendLyrics (el) {
@@ -153,8 +153,8 @@ function parseSong (html) {
       }
     }
   }
-  if (!lyricist) {
-    lyricist = get('كلمات')
+  if (!author) {
+    author = get('كلمات')
   }
   if (!composer) {
     composer = get('ألحان')
@@ -165,8 +165,8 @@ function parseSong (html) {
   if (title) {
     data.title = title
   }
-  if (lyricist) {
-    data.lyricist = lyricist
+  if (author) {
+    data.author = author
   }
   if (composer) {
     data.composer = composer
