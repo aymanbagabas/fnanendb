@@ -22,7 +22,7 @@ jobs:
 
     steps:
       - uses: technote-space/auto-cancel-redundant-job@v1
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
         with:
           fetch-depth: 0
 
