@@ -13,7 +13,7 @@
   "dependencies": {
     "cheerio": "^1.0.0-rc.12",
     "he": "^1.2.0",
-    "mocha": "^10.2.0",
+    "mocha": "^11.7.5",
     "node-fetch": "^3.3.1"
   },
   "devDependencies": {
